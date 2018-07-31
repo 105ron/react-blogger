@@ -3,6 +3,7 @@ import axios from 'axios';
 import './FullPost.css';
 
 class FullPost extends Component {
+    deletePostHandler = this.deletePostHandler.bind(this);
     state = {
         loadedPost: {
             title: null,
@@ -15,7 +16,7 @@ class FullPost extends Component {
         const { title, id: stateId } = this.state.loadedPost;
         if (postId) {
             if (!title || (title && stateId !== postId)) {
-                axios.get(`https://jsonplaceholder.typicode.com/posts/${postId}`)
+                axios.get(`/posts/${postId}`)
                     .then(response => 
                         this.setState({ loadedPost: response.data })
                     );
@@ -23,8 +24,13 @@ class FullPost extends Component {
         }
     }
 
+    deletePostHandler() {
+        const { id: postId } = this.props;
+        axios.delete(`/posts/${postId}`)
+            .then(response => console.log(response));
+    }
     render () {
-        const { title, content } = this.state.loadedPost;
+        const { title, body } = this.state.loadedPost;
         let post = <p style={{ textAlign: 'center' }}>Please select a Post!</p>;
         if (this.props.id) {
             post = <p style={{ textAlign: 'center' }}>Loading...</p>;
@@ -33,9 +39,14 @@ class FullPost extends Component {
             post = (
                 <div className="FullPost">
                     <h1>{title}</h1>
-                    <p>{content}</p>
+                    <p>{body}</p>
                     <div className="Edit">
-                        <button className="Delete">Delete</button>
+                        <button
+                        className="Delete"
+                        onClick={this.deletePostHandler}
+                        >
+                            Delete
+                        </button>
                     </div>
                 </div>
 
