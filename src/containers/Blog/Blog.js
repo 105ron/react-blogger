@@ -1,59 +1,35 @@
 import React, { Component } from 'react';
-import axiosInstance from '../../axios';
-import Post from '../../components/Post/Post';
+import Posts from '../../containers/Posts/Posts';
 import './Blog.css';
+import { Route, NavLink, Switch } from 'react-router-dom';
+import NewPost from '../NewPost/NewPost';
+import FullPost from '../FullPost/FullPost';
 
 class Blog extends Component {
-    postSelectedHandler = this.postSelectedHandler.bind(this);
-    state = {
-        posts: [],
-        selectedPostId: null,
-        error: false,
-    };
-
-    componentDidMount() {
-        axiosInstance.get('/posts')
-            .then(response => {
-            const posts = response.data.slice(0, 10).map(post => {
-                return {
-                    ...post,
-                    author: 'Rhys',
-                }
-            });
-            this.setState({posts})
-        }).catch(error=> this.setState({ error: true }));
-    }
-
-    postSelectedHandler(id) {
-        this.setState({ selectedPostId: id });
-    }
 
     render () {
-        const { posts, selectedPostId, error } = this.state;
-        let postsComponents = <p style={{ textAlign: 'center' }}>Something went wrong!</p>
-        if (!error) {
-            postsComponents = posts.map(post => {
-                return <Post
-                    key={post.id}
-                    title={post.title}
-                    author={post.author}
-                    clicked={() => this.postSelectedHandler(post.id)}
-                    />
-            })
-        }
         return (
             <div className="Blog">
                 <header>
                     <nav>
                         <ul>
-                            <li><a href="/"></a>Home</li>
-                            <li><a href="new-posts"></a>New Post</li>
+                            <li><NavLink
+                                to="/"
+                                exact
+                                activeClassName="something-else"
+                                activeStyle={{textDecoration: 'underline'}}
+                            >
+                                Home
+                            </NavLink></li>
+                            <li><NavLink to="/new-post" exact>New Post</NavLink></li>
                         </ul>
                     </nav>
                 </header>
-                <section className="Posts">
-                    {postsComponents}
-                </section>
+                <Switch>
+                    <Route path="/" component={Posts} exact />
+                    <Route path="/new-post" component={NewPost} exact />
+                    <Route path="/:id" component={FullPost} exact />
+                </Switch>
             </div>
         );
     }

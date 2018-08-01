@@ -11,8 +11,8 @@ class FullPost extends Component {
         },
     };
 
-    componentDidUpdate() {
-        const { id: postId } = this.props;
+    componentDidMount() {
+        const { id: postId } = this.props.match.params;
         const { title, id: stateId } = this.state.loadedPost;
         if (postId) {
             if (!title || (title && stateId !== postId)) {
