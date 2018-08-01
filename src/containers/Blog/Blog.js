@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import axiosInstance from '../../axios';
 import Post from '../../components/Post/Post';
-import FullPost from '../../components/FullPost/FullPost';
-import NewPost from '../../components/NewPost/NewPost';
 import './Blog.css';
 
 class Blog extends Component {
@@ -44,15 +42,17 @@ class Blog extends Component {
             })
         }
         return (
-            <div>
+            <div className="Blog">
+                <header>
+                    <nav>
+                        <ul>
+                            <li><a href="/"></a>Home</li>
+                            <li><a href="new-posts"></a>New Post</li>
+                        </ul>
+                    </nav>
+                </header>
                 <section className="Posts">
                     {postsComponents}
-                </section>
-                <section>
-                    <FullPost id={selectedPostId}/>
-                </section>
-                <section>
-                    <NewPost />
                 </section>
             </div>
         );
